@@ -1,7 +1,10 @@
 # 🏡 Nashville Housing Data Cleaning Project
 
 ## 📌 Executive Summary
-This project focuses on cleaning and transforming raw housing data to make it analysis-ready. Using SQL, the dataset was standardized, missing values were handled, columns were restructured, and duplicates were removed. The final output is a clean, structured dataset suitable for visualization in Tableau and real-world analytical use.
+ 
+In this project, I focus on cleaning and transforming raw housing data to make it analysis-ready. I use SQL to standardize the dataset, handle missing values, restructure columns, and remove duplicates.  
+
+The final output is a clean and structured dataset that is ready for visualization in Tableau and suitable for real-world analytical use.
 
 ---
 
@@ -15,79 +18,41 @@ This project focuses on cleaning and transforming raw housing data to make it an
 ---
 
 ## 🚀 Data Processing Steps
+  
+I begin by importing the raw Excel dataset into SQL Server and creating a working table called `NashvilleHousing`.  
 
-### 1. Data Import
-- Imported raw Excel dataset into SQL Server
-- Created a working table: `NashvilleHousing`
+I convert the `SaleDate` column from datetime to date format. When direct updates are not effective, I create a new column to ensure consistency.  
 
-### 2. Standardizing Date Format
-- Converted `SaleDate` from datetime to date format
-- Created a new column to ensure consistency when direct updates failed
+I identify null values in the `PropertyAddress` column and use a self-join on `ParcelID` to populate missing entries. I then apply `ISNULL()` to fill any remaining gaps using matching records.  
 
-### 3. Handling Missing Values
-- Identified null values in `PropertyAddress`
-- Used **self-join on ParcelID** to populate missing addresses
-- Applied `ISNULL()` to fill gaps using existing matching records
+For the property address, I split the data into `PropertySplitAddress` and `PropertySplitCity` using `SUBSTRING()` and `CHARINDEX()`.  
 
-### 4. Splitting Columns (Feature Engineering)
-#### Property Address
-- Split into:
-  - `PropertySplitAddress`
-  - `PropertySplitCity`
-- Used:
-  - `SUBSTRING()`
-  - `CHARINDEX()`
+For the owner address, I split it into `OwnerSplitAddress`, `OwnerSplitCity`, and `OwnerSplitState` using `PARSENAME()` and `REPLACE()` to standardize delimiters.  
 
-#### Owner Address
-- Split into:
-  - `OwnerSplitAddress`
-  - `OwnerSplitCity`
-  - `OwnerSplitState`
-- Used:
-  - `PARSENAME()`
-  - `REPLACE()` (comma → period)
+I clean the `SoldAsVacant` column by converting `Y/N` values into `Yes/No` using `CASE WHEN` for consistency.  
 
-### 5. Data Standardization
-- Cleaned `SoldAsVacant` column:
-  - Converted `Y/N` → `Yes/No`
-- Implemented using `CASE WHEN`
+I create a CTE using `ROW_NUMBER()` and partition the data by ParcelID, Address, SalePrice, SaleDate, and LegalReference. I then remove rows where the row number is greater than one.  
 
-### 6. Removing Duplicates
-- Created CTE with `ROW_NUMBER()`
-- Partitioned by:
-  - ParcelID, Address, SalePrice, SaleDate, LegalReference
-- Removed rows where `row_num > 1`
-
-### 7. Dropping Unused Columns
-- Removed redundant columns:
-  - Original address columns
-  - Tax-related unused fields
-- Improved dataset usability and clarity
+Finally, I remove redundant columns, including original address fields and unused tax-related data, to improve the dataset’s clarity and usability.
 
 ---
 
 ## 📊 Key Insights
-- Raw datasets often contain:
-  - Missing values
-  - Inconsistent formatting
-  - Redundant and duplicate records
-- Data cleaning significantly improves:
-  - Query efficiency
-  - Analytical accuracy
-  - Visualization quality
-- Structured columns (split fields) enable:
-  - Better filtering and grouping in Tableau
-- SQL is highly effective for scalable data cleaning workflows
+
+From this project, I observe that raw datasets often contain missing values, inconsistent formatting, and duplicate records.  
+
+I also see that proper data cleaning significantly improves query efficiency, analytical accuracy, and the overall quality of visualizations.  
+
+By restructuring columns into more granular fields, I enable better filtering and grouping in tools like Tableau.  
+
+This project also reinforces how effective SQL is when it comes to handling scalable data cleaning workflows.
 
 ---
 
 ## 💡 Recommendations
-- Always clean data **before** visualization or analysis  
-- Use **self-joins** to intelligently fill missing values  
-- Normalize categorical data early (e.g., Yes/No consistency)  
-- Avoid deleting raw data in production environments—use staging tables instead  
-- Automate cleaning workflows (ETL pipelines) for scalability  
-- Extend this project by:
-  - Adding exploratory data analysis (EDA)
-  - Building dashboards in Tableau
-  - Integrating Python for advanced processing  
+
+Based on this experience, I focus on a few key practices. I always clean data before moving into visualization or analysis, and I use self-joins to intelligently handle missing values.  
+
+I also standardize categorical data early to maintain consistency, and I avoid deleting raw data in production by working with staging tables instead.  
+
+To scale this approach, I look toward automating cleaning workflows through ETL pipelines. I also see opportunities to extend this project further by adding exploratory data analysis, building dashboards in Tableau, and integrating Python for more advanced processing.
