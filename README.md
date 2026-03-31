@@ -1,4 +1,4 @@
-# 🏡 Nashville Housing Data Cleaning Project (SQL + Tableau)
+# 🏡 Nashville Housing Data Cleaning Project
 
 ## 📌 Executive Summary
 This project focuses on cleaning and transforming raw housing data to make it analysis-ready. Using SQL, the dataset was standardized, missing values were handled, columns were restructured, and duplicates were removed. The final output is a clean, structured dataset suitable for visualization in Tableau and real-world analytical use.
